@@ -20,16 +20,17 @@ namespace BGW.BGShared {
 	///		 It will be xml, so it'll be pretty extensible without having to add too much code.
 	/// </remarks>
 	public class BGConfiguration {
-		private string LogDir { get; set; }
-		private string LogName { get; set; }
-		private string FiltersURI { get; set; }
-		private string SettingsURI { get; set; }
-		private string WatchDir { get; set; }
+		public string LogDir { get; set; }
+		public string LogName { get; set; }
+		public string FiltersURI { get; set; }
+		public string SettingsURI { get; set; }
+		public string WatchDir { get; private set; }
 
-		private const string DEFAULT_SETTINGS_URI = @"%USERPROFILE%\_BGWSettings.xml";
-		private const string DEFAULT_FILTERS_URI = @"%USERPROFILE%\_BGWFilters";
-		private const string DEFAULT_LOGDIR = @"%APPDATA%\BGWorkerLogs";
-		private const string DEFAULT_WATCHDIR = @"%USERPROFILE%";
+		//TODO change all of this shit to use a dictionary shenanigans
+		private const string DEFAULT_SETTINGS_URI = @"C:\Users\Brett\_BGWSettings.xml";
+		private const string DEFAULT_FILTERS_URI = @"C:\Users\Brett\_BGWFilters";
+		private const string DEFAULT_LOGDIR = @"C:\Users\Brett\AppData\Roaming\BGWorkerLogs";
+		private const string DEFAULT_WATCHDIR = @"C:\Users\Brett";
 		
 		public string LogURI { get => this.LogDir + @"\" + this.LogName; }
 		private System.Text.RegularExpressions.Regex _FilterRegex = null;

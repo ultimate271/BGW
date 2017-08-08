@@ -11,6 +11,7 @@ namespace BGW.BGShared {
 			try {
 				string FileContents = System.IO.File.ReadAllText(FiltersFile);
 				//regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"//[^\n]\n", "");
+				//This replace sequence will remove all white space, and in addition remove an sections that begin with // to the end of the line
 				regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"\s|//[^\n]*\n", "");
 				return (new System.Text.RegularExpressions.Regex(regexString), null);
 			}

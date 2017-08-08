@@ -10,39 +10,41 @@ using System.Threading.Tasks;
 
 namespace BGW.BGService {
 	public partial class Service1 : ServiceBase {
-		private System.IO.FileSystemWatcher FileWatcher;
-		private BGW.BGShared.Heart Heart;
-		private const string DEFAULT_FILTERS_FILE = "%USERPROFILE%\\.BGWFilters";
+		private BGW.BGShared.BGController Controller;
+		private BGW.BGShared.BGConfiguration Config;
 
 		public Service1() {
 			InitializeComponent();
+			//Get config and log file information from app.config
+			this.Config = new BGShared.BGConfiguration(System.Configuration.ConfigurationManager.AppSettings);
+			this.Controller = new BGShared.BGController(this.Config);
+
+			this.FileWatcher.Path = this.Config.WatchDir;
+			this.FileWatcher.Created += ((object sender, System.IO.FileSystemEventArgs e) => {
+				this.Controller.ProcessFile(new BGShared.ProcessFileInput() {
+					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath)
+				});
+			});
+			this.FileWatcher.Renamed += ((object sender, System.IO.RenamedEventArgs e) => {
+				this.Controller.ProcessFile(new BGShared.ProcessFileInput() {
+					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath),
+					PreviousURI = e.OldFullPath
+				});
+			});
+			this.FileWatcher.EnableRaisingEvents = true;
 		}
 
 
 		protected override void OnStart(string[] args) {
-			//Get config and log file information from app.config
-			string settingsURI = System.Configuration.ConfigurationManager.AppSettings["SettingsFile"] ?? DEFAULT_FILTERS_FILE;
-			//Instansiate an instance of Heart based on that information.
-			//Instansiate an instance of FileSystemWatcher.
-			if (this.FileWatcher == null) {
-				this.FileWatcher = new System.IO.FileSystemWatcher() {
-					IncludeSubdirectories = true,
-					EnableRaisingEvents = true,
-					Filter = "*.*",
-					NotifyFilter = System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.DirectoryName,
-					Path = "TODO INSERT PATH HERE"
-				};
-			}
-			this.FileWatcher.Created += ((object sender, System.IO.FileSystemEventArgs e) => {
-				var file = BGW.BGShared.BGHelper.GetInfo(e.FullPath);
-				this.Heart.ProcessFile(file);
-			});
-			this.FileWatcher.Renamed += ((object sender, System.IO.RenamedEventArgs e) => {
-				return; //TODO do stuff
-			});
+			string contents = "";
+			contents += $"LOG URI : {this.Config.LogURI}\n";
+			System.IO.File.WriteAllText("C:\\Users\\Brett\\ITFUCKINGWORKSOKAY.txt", contents);
+
 		}
 
 		protected override void OnStop() {
+			this.Controller.WriteLog();
 		}
+
 	}
 }

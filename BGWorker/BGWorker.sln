@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGUtil", "BGUtil\BGUtil.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGTester", "BGTester\BGTester.csproj", "{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BGSetup", "BGSetup\BGSetup.vdproj", "{931B9808-D0BF-42E8-A036-6C03E660DE7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,8 @@ Global
 		{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931B9808-D0BF-42E8-A036-6C03E660DE7D}.Debug|Any CPU.ActiveCfg = Debug
+		{931B9808-D0BF-42E8-A036-6C03E660DE7D}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

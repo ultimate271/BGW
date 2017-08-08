@@ -23,10 +23,24 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			components = new System.ComponentModel.Container();
-			this.ServiceName = "Service1";
+			this.FileWatcher = new System.IO.FileSystemWatcher();
+			((System.ComponentModel.ISupportInitialize)(this.FileWatcher)).BeginInit();
+			// 
+			// FileWatcher
+			// 
+			this.FileWatcher.Filter = "*";
+			this.FileWatcher.IncludeSubdirectories = true;
+			// 
+			// Service1
+			// 
+			this.CanHandlePowerEvent = true;
+			this.CanHandleSessionChangeEvent = true;
+			((System.ComponentModel.ISupportInitialize)(this.FileWatcher)).EndInit();
+
 		}
 
 		#endregion
+
+		private System.IO.FileSystemWatcher FileWatcher;
 	}
 }
