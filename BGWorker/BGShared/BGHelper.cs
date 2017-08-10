@@ -23,12 +23,6 @@ namespace BGW.BGShared {
 			return GetSetting(settingsDoc, key, "");
 		}
 		public static string GetSetting(this System.Xml.Linq.XDocument settingsDoc, string Key, string Default) {
-			var query =
-				from element in settingsDoc.Root.Elements("setting")
-				where element.Attribute("Key") != null
-				&& element.Attribute("Value") != null
-				&& element.Attribute("Key").Value.Equals(Key)
-				select element.Attribute("Value").Value;
 			string retVal = (
 				from element in settingsDoc.Root.Elements("setting")
 				where element.Attribute("Key") != null
@@ -39,6 +33,28 @@ namespace BGW.BGShared {
 			retVal = System.Environment.ExpandEnvironmentVariables(retVal);
 			return retVal;
 		}
+		public static System.Collections.Generic.Dictionary<string, string> GetMacroDict(
+			this System.Xml.Linq.XDocument settingsDoc
+		) {
+			var retVal = new System.Collections.Generic.Dictionary<string, string>();
+			var query =
+				from element in settingsDoc.Root.Elements("macro")
+				where element.Attribute("Key") != null
+				&& element.Attribute("Value") != null
+				group element
+				by element.Attribute("Key").Value
+				into g
+				select new {
+					Key = g.Key,
+					Value = g.First().Attribute("Value").Value
+				}
+			;
+			foreach (var kvp in query) {
+				retVal.Add(kvp.Key, kvp.Value);
+			}
+			
+			return retVal;
+		}	
 		public static string Implode(this System.Collections.Generic.IEnumerable<string> stringList, char delimiter) {
 			string retVal = "";
 			foreach (string s in stringList) {

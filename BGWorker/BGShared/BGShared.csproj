@@ -50,6 +50,8 @@
     <Compile Include="BGLog.cs" />
     <Compile Include="Heart.cs" />
     <Compile Include="LogInfo.cs" />
+    <Compile Include="LogInfoFileEdit .cs" />
+    <Compile Include="LogInfoSettingInit.cs" />
     <Compile Include="ProcessFileInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

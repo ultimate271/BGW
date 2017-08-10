@@ -1,5 +1,5 @@
 ﻿namespace BGW.BGService {
-	partial class Service1 {
+	partial class BGWorker {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -23,24 +23,14 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.FileWatcher = new System.IO.FileSystemWatcher();
-			((System.ComponentModel.ISupportInitialize)(this.FileWatcher)).BeginInit();
 			// 
-			// FileWatcher
-			// 
-			this.FileWatcher.Filter = "*";
-			this.FileWatcher.IncludeSubdirectories = true;
-			// 
-			// Service1
+			// BGWorker
 			// 
 			this.CanHandlePowerEvent = true;
 			this.CanHandleSessionChangeEvent = true;
-			((System.ComponentModel.ISupportInitialize)(this.FileWatcher)).EndInit();
 
 		}
 
 		#endregion
-
-		private System.IO.FileSystemWatcher FileWatcher;
 	}
 }

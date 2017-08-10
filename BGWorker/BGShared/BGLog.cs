@@ -1,24 +1,22 @@
 ﻿using System.Linq;
 namespace BGW.BGShared {
+	public delegate void LogEventHandler (object sender, ILogInfo info);
 	public class BGLog {
-		private System.Collections.Generic.List<LogInfo> LogInfo { get; set; }
-		private string LogURI { get; set; }
+		private System.Collections.Generic.List<ILogInfo> LogInfo { get; set; }
 
-		public BGLog(BGConfiguration config) {
-			this.LogInfo = new System.Collections.Generic.List<BGShared.LogInfo>();
-			this.LogURI = config.LogURI;
+		public BGLog() {
+			this.LogInfo = new System.Collections.Generic.List<BGShared.ILogInfo>();
 		}
 
-		public void Add(LogInfo nextEntry) {
+		public void Add(ILogInfo nextEntry) {
 			this.LogInfo.Add(nextEntry);
 		}
 
-		public void WriteLog() {
-			string fileContents = (
+		public string WriteLog() {
+			return (
 				from log in this.LogInfo
 				select log.CommentLine
 			).Implode('\n');
-			System.IO.File.WriteAllText(this.LogURI, fileContents);
 		}	
 	}
 }

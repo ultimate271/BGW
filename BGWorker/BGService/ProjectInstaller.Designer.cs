@@ -34,7 +34,7 @@
 			// 
 			// serviceInstaller1
 			// 
-			this.serviceInstaller1.ServiceName = "Service1";
+			this.serviceInstaller1.ServiceName = "BGWorker";
 			this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
 			// 
 			// ProjectInstaller

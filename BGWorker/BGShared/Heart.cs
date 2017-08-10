@@ -9,8 +9,7 @@ namespace BGW.BGShared {
 	public class Heart {
 		private Regex HideFilter { get; set; }
 
-		public delegate void FileEditedHandler(object sender, LogInfo loginfo);
-		public event FileEditedHandler FileEdited;
+		public event LogEventHandler FileEdited;
 
 		/// <summary>
 		/// Constructor which takes in the configuration xml and creates a heart from it.
@@ -38,7 +37,7 @@ namespace BGW.BGShared {
 				//Set the file attributes to hidden
 				procFile.Attributes = procFile.Attributes | FileAttributes.Hidden;
 				//Add the change to the log.
-				FileEdited?.Invoke(this, new LogInfo(){
+				FileEdited?.Invoke(this, new LogInfoFileEdit(){
 					TimeStamp = System.DateTime.Now,
 					FullFileName = procFile.FullName,
 					PreviousFileName = PreviousURI

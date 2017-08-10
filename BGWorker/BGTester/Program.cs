@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace BGW.BGTester {
 	public class Program {
 		static void Main(string[] args) {
-			var config = new BGShared.BGConfiguration(System.Configuration.ConfigurationManager.AppSettings);
-			var watcher = config.FileWatcher;
-			var controller = new BGW.BGShared.BGController(config);
+			var controller = new BGW.BGShared.BGController(System.Configuration.ConfigurationManager.AppSettings);
+			var watcher = controller.Watcher;
 			watcher.Created += ((object sender, System.IO.FileSystemEventArgs e) => {
 				controller.ProcessFile(new BGShared.ProcessFileInput() {
 					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath)

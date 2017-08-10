@@ -14,7 +14,7 @@ namespace BGW.BGService {
 			ServiceBase[] ServicesToRun;
 			ServicesToRun = new ServiceBase[]
 			{
-				new Service1()
+				new BGWorker()
 			};
 			ServiceBase.Run(ServicesToRun);
 		}

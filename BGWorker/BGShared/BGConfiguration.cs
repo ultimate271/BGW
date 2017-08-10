@@ -20,18 +20,78 @@ namespace BGW.BGShared {
 	///		 It will be xml, so it'll be pretty extensible without having to add too much code.
 	/// </remarks>
 	public class BGConfiguration {
-		public string LogDir { get; set; }
-		public string LogName { get; set; }
-		public string FiltersURI { get; set; }
-		public string SettingsURI { get; set; }
-		public string WatchDir { get; private set; }
+		private string _LogDir = DEFAULT_LOGDIR;
+		private string _FiltersURI = DEFAULT_FILTERS_URI;
+		private string _SettingsURI = DEFAULT_SETTINGS_URI;
+		private string _WatchDir = DEFAULT_WATCHDIR;
+		private string _LogName;
+
+		private string LogDir {
+			get => _LogDir;
+			set {
+				_LogDir = value;
+				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+					SettingName = "LogDir",
+					NewValue = value,
+					TimeStamp = System.DateTime.Now
+				});
+			}
+		}
+		private string FiltersURI {
+			get => _FiltersURI;
+			set {
+				_FiltersURI = value;
+				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+					SettingName = "FiltersURI",
+					NewValue = value,
+					TimeStamp = System.DateTime.Now
+				});
+			}
+		}
+		private string SettingsURI {
+			get => _SettingsURI;
+			set {
+				_SettingsURI = value;
+				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+					SettingName = "SettingsURI",
+					NewValue = value,
+					TimeStamp = System.DateTime.Now
+				});
+			}
+		}
+		private string WatchDir {
+			get => _WatchDir;
+			set {
+				_WatchDir = value;
+				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+					SettingName = "WatchDir",
+					NewValue = value,
+					TimeStamp = System.DateTime.Now
+				});
+			}
+		}
+		private string LogName {
+			get => _LogName;
+			set {
+				_LogName = value;
+				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+					SettingName = "LogName",
+					NewValue = value,
+					TimeStamp = System.DateTime.Now
+				});
+			}
+		}
 
 		//TODO change all of this shit to use a dictionary shenanigans
 		private const string DEFAULT_SETTINGS_URI = @"C:\Users\Brett\_BGWSettings.xml";
 		private const string DEFAULT_FILTERS_URI = @"C:\Users\Brett\_BGWFilters";
 		private const string DEFAULT_LOGDIR = @"C:\Users\Brett\AppData\Roaming\BGWorkerLogs";
 		private const string DEFAULT_WATCHDIR = @"C:\Users\Brett";
-		
+
+		private System.Collections.Generic.Dictionary<string, string> MacroDict;
+
+		public event LogEventHandler SettingInitialized;
+
 		public string LogURI { get => this.LogDir + @"\" + this.LogName; }
 		private System.Text.RegularExpressions.Regex _FilterRegex = null;
 		public System.Text.RegularExpressions.Regex FilterRegex {
@@ -48,19 +108,23 @@ namespace BGW.BGShared {
 			});
 		}
 
-		public BGConfiguration(System.Collections.Specialized.NameValueCollection appSettings) {
+		public BGConfiguration() { }
+		public void Init(System.Collections.Specialized.NameValueCollection appSettings) {
 			//Set the SettingsFileURI.
-			this.SettingsURI = System.Environment.ExpandEnvironmentVariables(
-				appSettings["SettingsFile"] ?? DEFAULT_SETTINGS_URI
-			);
+			this.SettingsURI = appSettings["SettingsFile"] ?? DEFAULT_SETTINGS_URI;
 			//Open the SettingsFile.
 			var xDoc = System.Xml.Linq.XDocument.Load(this.SettingsURI);
 
+			this.MacroDict = xDoc.GetMacroDict();
 			//Set the filterURI
-			this.FiltersURI = xDoc.GetSetting("Filter", DEFAULT_FILTERS_URI);
+			this.FiltersURI = this.ExpandMacroVariables(
+				xDoc.GetSetting("Filter", DEFAULT_FILTERS_URI)
+			);
 
 			//Set the LogDir
-			this.LogDir = xDoc.GetSetting("LogDir", DEFAULT_LOGDIR);
+			this.LogDir = this.ExpandMacroVariables(
+				xDoc.GetSetting("LogDir", DEFAULT_LOGDIR)
+			);
 
 			//If the LogDir doesn't exist, create it.
 			if (!System.IO.Directory.Exists(this.LogDir)) {
@@ -68,11 +132,29 @@ namespace BGW.BGShared {
 			}
 
 			//Set the LogDir
-			this.WatchDir = xDoc.GetSetting("WatchDir", DEFAULT_WATCHDIR);
+			this.WatchDir = this.ExpandMacroVariables(
+				xDoc.GetSetting("WatchDir", DEFAULT_WATCHDIR)
+			);
 
 			//Set the LogName
 			this.LogName = String.Format("{0:yyyyMMddHHmmss}.log", System.DateTime.Now);
+		}
 
+		private string ExpandMacroVariables(string input) {
+			//Matchs everywhere where it looks like ${keyname} and replaces keyname with the value in the MacroDict
+			//If the key isn't found in the dictionary, just keep it as is.
+			return System.Text.RegularExpressions.Regex.Replace(
+				input,
+				@"\${(?<Key>\w*)}",
+				((System.Text.RegularExpressions.Match m) => {
+					try {
+						return this.MacroDict[m.Groups["Key"].Value];
+					}
+					catch (KeyNotFoundException) {
+						return m.Value;
+					}
+				})
+			);
 		}
 		
 	}
