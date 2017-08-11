@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BGW.BGTester {
+namespace BGW.Tester {
 	public class Program {
 		static void Main(string[] args) {
 			var controller = new BGW.Controller.Controller(System.Configuration.ConfigurationManager.AppSettings);
