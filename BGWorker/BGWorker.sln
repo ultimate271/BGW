@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGService", "BGService\BGService.csproj", "{252EE206-173D-4390-8AA9-E31D0F91E120}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{252EE206-173D-4390-8AA9-E31D0F91E120}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGShared", "BGShared\BGShared.csproj", "{27649024-4AC7-473F-8B42-70E7413CDA2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{27649024-4AC7-473F-8B42-70E7413CDA2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGUtil", "BGUtil\BGUtil.csproj", "{436F3BF1-1B98-4B14-9B14-EA4B93E5D4C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Util\Utility.csproj", "{436F3BF1-1B98-4B14-9B14-EA4B93E5D4C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGTester", "BGTester\BGTester.csproj", "{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BGSetup", "BGSetup\BGSetup.vdproj", "{931B9808-D0BF-42E8-A036-6C03E660DE7D}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\BGSetup.vdproj", "{931B9808-D0BF-42E8-A036-6C03E660DE7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{7B019C5E-2BDF-43EC-9D77-907BEDCD2593}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{3F7438F2-45C3-4BA7-9D49-6C6B5B13EC40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,14 @@ Global
 		{829F71A1-C8E9-47BF-ACA1-4E3ECE5E7E4A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{931B9808-D0BF-42E8-A036-6C03E660DE7D}.Debug|Any CPU.ActiveCfg = Debug
 		{931B9808-D0BF-42E8-A036-6C03E660DE7D}.Release|Any CPU.ActiveCfg = Release
+		{7B019C5E-2BDF-43EC-9D77-907BEDCD2593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B019C5E-2BDF-43EC-9D77-907BEDCD2593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B019C5E-2BDF-43EC-9D77-907BEDCD2593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B019C5E-2BDF-43EC-9D77-907BEDCD2593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F7438F2-45C3-4BA7-9D49-6C6B5B13EC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F7438F2-45C3-4BA7-9D49-6C6B5B13EC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F7438F2-45C3-4BA7-9D49-6C6B5B13EC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F7438F2-45C3-4BA7-9D49-6C6B5B13EC40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

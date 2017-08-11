@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace BGW.BGTester {
 	public class Program {
 		static void Main(string[] args) {
-			var controller = new BGW.BGShared.BGController(System.Configuration.ConfigurationManager.AppSettings);
+			var controller = new BGW.Controller.Controller(System.Configuration.ConfigurationManager.AppSettings);
 			var watcher = controller.Watcher;
 			watcher.Created += ((object sender, System.IO.FileSystemEventArgs e) => {
-				controller.ProcessFile(new BGShared.ProcessFileInput() {
-					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath)
+				controller.ProcessFile(new BGW.Controller.ProcessFileInput() {
+					FileInfo = Shared.Helper.GetInfo(e.FullPath)
 				});
 			});
 			watcher.Renamed += ((object sender, System.IO.RenamedEventArgs e) => {
-				controller.ProcessFile(new BGShared.ProcessFileInput() {
-					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath),
+				controller.ProcessFile(new BGW.Controller.ProcessFileInput() {
+					FileInfo = Shared.Helper.GetInfo(e.FullPath),
 					PreviousURI = e.OldFullPath
 				});
 			});

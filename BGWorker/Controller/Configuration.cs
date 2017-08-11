@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BGW.Shared;
 
-namespace BGW.BGShared {
+namespace BGW.Controller {
 	/// <summary>
 	/// Class for handling the configuration files.
 	/// </summary>
@@ -19,7 +15,7 @@ namespace BGW.BGShared {
 	///		The settings file is an xml file which will keep track of things like the directories that should be changed, and other settings I might think of later
 	///		 It will be xml, so it'll be pretty extensible without having to add too much code.
 	/// </remarks>
-	public class BGConfiguration {
+	public class Configuration {
 		private string _LogDir = DEFAULT_LOGDIR;
 		private string _FiltersURI = DEFAULT_FILTERS_URI;
 		private string _SettingsURI = DEFAULT_SETTINGS_URI;
@@ -27,10 +23,10 @@ namespace BGW.BGShared {
 		private string _LogName;
 
 		private string LogDir {
-			get => _LogDir;
+			get { return this._LogDir; }
 			set {
-				_LogDir = value;
-				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+				this._LogDir = value;
+				SettingInitialized.Invoke(this, new LogInfoSettingInit() {
 					SettingName = "LogDir",
 					NewValue = value,
 					TimeStamp = System.DateTime.Now
@@ -38,10 +34,10 @@ namespace BGW.BGShared {
 			}
 		}
 		private string FiltersURI {
-			get => _FiltersURI;
+			get { return this._FiltersURI; }
 			set {
-				_FiltersURI = value;
-				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+				this._FiltersURI = value;
+				SettingInitialized.Invoke(this, new LogInfoSettingInit() {
 					SettingName = "FiltersURI",
 					NewValue = value,
 					TimeStamp = System.DateTime.Now
@@ -49,10 +45,10 @@ namespace BGW.BGShared {
 			}
 		}
 		private string SettingsURI {
-			get => _SettingsURI;
+			get { return this._SettingsURI; }
 			set {
-				_SettingsURI = value;
-				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+				this._SettingsURI = value;
+				SettingInitialized.Invoke(this, new LogInfoSettingInit() {
 					SettingName = "SettingsURI",
 					NewValue = value,
 					TimeStamp = System.DateTime.Now
@@ -60,10 +56,10 @@ namespace BGW.BGShared {
 			}
 		}
 		private string WatchDir {
-			get => _WatchDir;
+			get { return this._WatchDir; }
 			set {
-				_WatchDir = value;
-				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+				this._WatchDir = value;
+				SettingInitialized.Invoke(this, new LogInfoSettingInit() {
 					SettingName = "WatchDir",
 					NewValue = value,
 					TimeStamp = System.DateTime.Now
@@ -71,44 +67,46 @@ namespace BGW.BGShared {
 			}
 		}
 		private string LogName {
-			get => _LogName;
+			get { return this._LogName; }
 			set {
-				_LogName = value;
-				SettingInitialized?.Invoke(this, new LogInfoSettingInit() {
+				this._LogName = value;
+				SettingInitialized.Invoke(this, new LogInfoSettingInit() {
 					SettingName = "LogName",
 					NewValue = value,
 					TimeStamp = System.DateTime.Now
 				});
 			}
 		}
+		private System.Collections.Generic.Dictionary<string, string> MacroDict;
 
-		//TODO change all of this shit to use a dictionary shenanigans
 		private const string DEFAULT_SETTINGS_URI = @"C:\Users\Brett\_BGWSettings.xml";
 		private const string DEFAULT_FILTERS_URI = @"C:\Users\Brett\_BGWFilters";
 		private const string DEFAULT_LOGDIR = @"C:\Users\Brett\AppData\Roaming\BGWorkerLogs";
 		private const string DEFAULT_WATCHDIR = @"C:\Users\Brett";
 
-		private System.Collections.Generic.Dictionary<string, string> MacroDict;
 
-		public event LogEventHandler SettingInitialized;
+		public event LogEventHandler SettingInitialized = ((object sender, LogInfoSettingInit info) => { });
 
-		public string LogURI { get => this.LogDir + @"\" + this.LogName; }
+		public string LogURI { get { return this.LogDir + @"\" + this.LogName; } }
+
 		private System.Text.RegularExpressions.Regex _FilterRegex = null;
 		public System.Text.RegularExpressions.Regex FilterRegex {
-			get => _FilterRegex ?? (_FilterRegex = BGW.BGShared.BGHelper.GetRegex(this.FiltersURI).regex);
+			get { return this._FilterRegex ?? (this._FilterRegex = BGW.Shared.Helper.GetRegex(this.FiltersURI)); }
 		}
 
 		private System.IO.FileSystemWatcher _FileWatcher = null;
 		public System.IO.FileSystemWatcher FileWatcher {
-			get => _FileWatcher ?? (_FileWatcher = new System.IO.FileSystemWatcher() {
-				Path = this.WatchDir,
-				IncludeSubdirectories = true,
-				Filter = "*",
-				NotifyFilter = System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.DirectoryName
-			});
+			get {
+				return this._FileWatcher ?? (this._FileWatcher = new System.IO.FileSystemWatcher() {
+					Path = this.WatchDir,
+					IncludeSubdirectories = true,
+					Filter = "*",
+					NotifyFilter = System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.DirectoryName
+				});
+			}
 		}
 
-		public BGConfiguration() { }
+		public Configuration() { }
 		public void Init(System.Collections.Specialized.NameValueCollection appSettings) {
 			//Set the SettingsFileURI.
 			this.SettingsURI = appSettings["SettingsFile"] ?? DEFAULT_SETTINGS_URI;
@@ -137,7 +135,7 @@ namespace BGW.BGShared {
 			);
 
 			//Set the LogName
-			this.LogName = String.Format("{0:yyyyMMddHHmmss}.log", System.DateTime.Now);
+			this.LogName = string.Format("{0:yyyyMMddHHmmss}.log", System.DateTime.Now);
 		}
 
 		private string ExpandMacroVariables(string input) {
@@ -150,7 +148,7 @@ namespace BGW.BGShared {
 					try {
 						return this.MacroDict[m.Groups["Key"].Value];
 					}
-					catch (KeyNotFoundException) {
+					catch (System.Collections.Generic.KeyNotFoundException) {
 						return m.Value;
 					}
 				})

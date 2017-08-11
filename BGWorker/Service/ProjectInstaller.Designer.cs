@@ -1,4 +1,4 @@
-﻿namespace BGW.BGService {
+﻿namespace BGW.Service {
 	partial class ProjectInstaller {
 		/// <summary>
 		/// Required designer variable.
@@ -40,8 +40,8 @@
 			// ProjectInstaller
 			// 
 			this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.serviceProcessInstaller1,
-            this.serviceInstaller1});
+			this.serviceProcessInstaller1,
+			this.serviceInstaller1});
 
 		}
 

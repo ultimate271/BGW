@@ -1,11 +1,12 @@
 ﻿using System.Linq;
-namespace BGW.BGShared {
-	public delegate void LogEventHandler (object sender, ILogInfo info);
-	public class BGLog {
+using BGW.Shared;
+namespace BGW.Controller {
+	public delegate void LogEventHandler (object sender, LogInfoSettingInit info);
+	public class Log {
 		private System.Collections.Generic.List<ILogInfo> LogInfo { get; set; }
 
-		public BGLog() {
-			this.LogInfo = new System.Collections.Generic.List<BGShared.ILogInfo>();
+		public Log() {
+			this.LogInfo = new System.Collections.Generic.List<ILogInfo>();
 		}
 
 		public void Add(ILogInfo nextEntry) {
@@ -15,6 +16,7 @@ namespace BGW.BGShared {
 		public string WriteLog() {
 			return (
 				from log in this.LogInfo
+				orderby log.TimeStamp
 				select log.CommentLine
 			).Implode('\n');
 		}	

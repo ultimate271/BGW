@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Linq;
-namespace BGW.BGShared {
-	public static class BGHelper {
+namespace BGW.Shared {
+	public static class Helper {
 		public static System.IO.FileInfo GetInfo(string FullURI) {
 			return new System.IO.FileInfo(FullURI);
 		}
-		public static (System.Text.RegularExpressions.Regex regex, System.Exception e) GetRegex(string FiltersFile) {
+		public static System.Text.RegularExpressions.Regex GetRegex(string FiltersFile) {
 			string regexString = "";
-			try {
-				string FileContents = System.IO.File.ReadAllText(FiltersFile);
-				//regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"//[^\n]\n", "");
-				//This replace sequence will remove all white space, and in addition remove an sections that begin with // to the end of the line
-				regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"\s|//[^\n]*\n", "");
-				return (new System.Text.RegularExpressions.Regex(regexString), null);
-			}
-			catch(System.Exception e) {
-				return (null, e);
-			}
+			string FileContents = System.IO.File.ReadAllText(FiltersFile);
+			//regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"//[^\n]\n", "");
+			//This replace sequence will remove all white space, and in addition remove an sections that begin with // to the end of the line
+			regexString += System.Text.RegularExpressions.Regex.Replace(FileContents, @"\s|//[^\n]*\n", "");
+			return new System.Text.RegularExpressions.Regex(regexString);
 		}
 		public static string GetSetting(this System.Xml.Linq.XDocument settingsDoc, string key) {
 			return GetSetting(settingsDoc, key, "");

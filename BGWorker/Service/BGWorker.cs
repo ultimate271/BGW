@@ -8,9 +8,9 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BGW.BGService {
+namespace BGW.Service {
 	public partial class BGWorker : ServiceBase {
-		private BGW.BGShared.BGController Controller { get; set; }
+		private BGW.Controller.Controller Controller { get; set; }
 		private System.IO.FileSystemWatcher Watcher { get; set; }
 
 		public BGWorker() {
@@ -19,17 +19,17 @@ namespace BGW.BGService {
 
 
 		protected override void OnStart(string[] args) {
-			this.Controller = new BGShared.BGController(System.Configuration.ConfigurationManager.AppSettings);
+			this.Controller = new Controller.Controller(System.Configuration.ConfigurationManager.AppSettings);
 			this.Watcher = this.Controller.Watcher;
 
 			this.Watcher.Created += ((object sender, System.IO.FileSystemEventArgs e) => {
-				this.Controller.ProcessFile(new BGShared.ProcessFileInput() {
-					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath)
+				this.Controller.ProcessFile(new BGW.Controller.ProcessFileInput() {
+					FileInfo = Shared.Helper.GetInfo(e.FullPath)
 				});
 			});
 			this.Watcher.Renamed += ((object sender, System.IO.RenamedEventArgs e) => {
-				this.Controller.ProcessFile(new BGShared.ProcessFileInput() {
-					FileInfo = BGShared.BGHelper.GetInfo(e.FullPath),
+				this.Controller.ProcessFile(new Controller.ProcessFileInput() {
+					FileInfo = Shared.Helper.GetInfo(e.FullPath),
 					PreviousURI = e.OldFullPath
 				});
 			});

@@ -2,21 +2,21 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace BGW.BGShared {
+namespace BGW.Model {
 	/// <summary>
 	/// Class which will implement the logic of what goes on.
 	/// </summary>
 	public class Heart {
 		private Regex HideFilter { get; set; }
 
-		public event LogEventHandler FileEdited;
+		public event FileEdittedEventHandler FileEdited = ((object sender, FileEdittedEventArgs e) => { });
 
 		/// <summary>
 		/// Constructor which takes in the configuration xml and creates a heart from it.
 		/// </summary>
 		/// <param name="xDoc"></param>
-		public Heart (BGConfiguration config) {
-			this.HideFilter = config.FilterRegex ?? new Regex("");
+		public Heart (Regex HideFilter) {
+			this.HideFilter = HideFilter ?? new Regex("");
 		}
 
 		public void ProcessFile(FileInfo procFile) {
@@ -37,7 +37,7 @@ namespace BGW.BGShared {
 				//Set the file attributes to hidden
 				procFile.Attributes = procFile.Attributes | FileAttributes.Hidden;
 				//Add the change to the log.
-				FileEdited?.Invoke(this, new LogInfoFileEdit(){
+				FileEdited.Invoke(this, new FileEdittedEventArgs() {
 					TimeStamp = System.DateTime.Now,
 					FullFileName = procFile.FullName,
 					PreviousFileName = PreviousURI

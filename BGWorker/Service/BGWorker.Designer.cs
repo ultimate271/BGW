@@ -1,4 +1,4 @@
-﻿namespace BGW.BGService {
+﻿namespace BGW.Service {
 	partial class BGWorker {
 		/// <summary> 
 		/// Required designer variable.
